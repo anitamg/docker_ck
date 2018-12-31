@@ -1,0 +1,39 @@
+1.	What is docker ?
+Docker  is a tool designed to create, deploy, and run applications by using containers. 
+Containers allow a developer to package up an application with all of the parts it needs, such as libraries and other dependencies, and ship it all out as one package. By doing so, the developer can rest assured that the application will run on any other Linux machine regardless of any customized settings that machine might have that could differ from the machine used for writing and testing the code.
+
+2.	Why & When to use docker?
+•	Learning new technologies: To get started with a new tool without spending time on installation and configuration, Docker offers an isolated and disposable environment. Many projects maintain Docker images with their applications already installed and configured. For example, if you want to check out a distributed tracing system like Zipkin
+•	Basic use cases: Pulling images from Docker Hub is also a good solution if your application is basic or standard enough to work with a default Docker image. Cases such as hosting a website using a LAMP stack, using a reverse proxy, or setting up a Minecraft server often have an official or well-supported image available on DockerHub. If the default configuration in these images is acceptable for your needs, then pulling the image can save a lot of time that would otherwise be spent setting up your environment and installing the necessary tools.
+•	App isolation: If you want to run multiple applications on one server, keeping the components of each application in separate containers will prevent problems with dependency management.
+•	Developer teams: If you have developers working with different setups, Docker provides a convenient way to have local development environments that closely match the production environment, without needing to ssh into a remote box.
+3.	How Docker works?
+So if you want to run a copy of an OS on your host machine your best bet is to setup a virtual machine, dual boot or use a tool like vagrant with the latter making the virtualisation process automated and sharable . Docker does the same thing but doesn’t need another OS installed, instead it uses the host OS. ie: the operating system your computer is running by isolating parts of the host resources to create a virtual machine. Some of the things Docker isolates includes network, space and processes. Since Docker makes use of the host OS it means there is no OS setup and boot up process . This makes spinning up a virtual box quicker. 
+
+4.	Docker security 
+There are four major areas to consider when reviewing Docker security:
+•	the intrinsic security of the kernel and its support for namespaces and cgroups;
+•	the attack surface of the Docker daemon itself;
+•	Loopholes in the container configuration profile, either by default, or when customized by users.
+•	The “hardening” security features of the kernel and how they interact with containers.
+Kernel namespace
+Docker containers are very similar to LXC containers, and they have similar security features. When you start a container with docker run, behind the scenes Docker creates a set of namespaces and control groups for the container.
+Namespaces provide the first and most straightforward form of isolation: processes running within a container cannot see, and even less affect, processes running in another container, or in the host system.
+Each container also gets its own network stack, meaning that a container doesn’t get privileged access to the sockets or interfaces of another container. if the host system is setup accordingly, containers can interact with each other through their respective network interfaces — just like they can interact with external hosts. When you specify public ports for your containers or use links then IP traffic is allowed between containers. They can ping each other, send/receive UDP packets, and establish TCP connections, but that can be restricted if necessary. From a network architecture point of view, all containers on a given Docker host are sitting on bridge interfaces. This means that they are just like physical machines connected through a common Ethernet switch; no more, no less.
+Control groups
+Control Groups are another key component of Linux Containers. They implement resource accounting and limiting. They provide many useful metrics, but they also help ensure that each container gets its fair share of memory, CPU, disk I/O; and, more importantly, that a single container cannot bring the system down by exhausting one of those resources.
+So while they do not play a role in preventing one container from accessing or affecting the data and processes of another container, they are essential to fend off some denial-of-service attacks. They are particularly important on multi-tenant platforms, like public and private PaaS, to guarantee a consistent uptime (and performance) even when some applications start to misbehave.
+
+5.	How is docker different from virtual machine?
+
+?	If you have a 1 GB container image; if you wanted to use a full VM, you would need to have 1 GB times x number of VMs you want. With Docker and AuFS you can share the bulk of the 1 GB between all the containers and if you have 1000 containers you still might only have a little over 1 GB of space for the containers OS. 
+?	A full virtualized system gets its own set of resources allocated to it, and does minimal sharing. You get more isolation, but it is much heavier (requires more resources). With Docker you get less isolation, but the containers are lightweight (require fewer resources). So you could easily run thousands of containers on a host, and it won't even blink. 
+?	A full virtualized system usually takes minutes to start, whereas Docker/LXC/runC containers take seconds, and often even less than a second.
+
+ 
+ 
+
+
+
+
+
